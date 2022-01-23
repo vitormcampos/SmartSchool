@@ -32,11 +32,11 @@ namespace SmartSchool.WebAPI
         { 
             new Professor() {
                 Id = 1,
-                Nome = "Rogerio"
+                Nome = "Dada"
             },
             new Professor() {
                 Id = 2,
-                Nome = "Marcos"
+                Nome = "Livia"
             },
             new Professor() {
                 Id = 3,
@@ -45,7 +45,38 @@ namespace SmartSchool.WebAPI
             new Professor() {
                 Id = 4,
                 Nome = "Claudia"
-            },
+            }
          };
+
+        public static List<Disciplina> Disciplinas = new List<Disciplina> 
+        { 
+            new Disciplina() {
+                Id = 1,
+                Nome = "Programação Web",
+                Professor = Professores[1],
+                ProfessorId = 1
+            },
+            new Disciplina() {
+                Id = 2,
+                Nome = "TCC",
+                Professor = Professores[2],
+                ProfessorId = 2
+            },
+            new Disciplina() {
+                Id = 3,
+                Nome = "Programação Mobile",
+                Professor = Professores[1],
+                ProfessorId = 1
+            },
+            new Disciplina() {
+                Id = 4,
+                Nome = "Banco de dados",
+                Professor = Professores[3],
+                ProfessorId = 3
+            },
+
+
+         };
+         
     }
 }
