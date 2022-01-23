@@ -5,9 +5,8 @@ namespace SmartSchool.WebAPI
 {
     public static class Repository
     {
-        public static IEnumerable<Aluno> Alunos()
+        public static List<Aluno> Alunos = new List<Aluno> 
         {
-            var lista = new List<Aluno>() {
                 new Aluno() {
                     Id = 1,
                     Nome = "Vitor",
@@ -28,7 +27,5 @@ namespace SmartSchool.WebAPI
                 },
                 
             };
-            return lista;
-        }
     }
 }
