@@ -1,0 +1,61 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj": {}
+  },
+  "projects": {
+    "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj",
+        "projectName": "SmartSchool",
+        "projectPath": "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj",
+        "packagesPath": "/home/vitor/.nuget/packages/",
+        "outputPath": "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/vitor/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/vitor/dotnet/sdk/3.1.416/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
