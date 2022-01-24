@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SmartSchool.WebAPI.Data;
 using SmartSchool.WebAPI.Models;
 
 namespace SmartSchool.WebAPI.Controllers
@@ -9,25 +12,39 @@ namespace SmartSchool.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ProfessorController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<Professor>> Get()
+        public Context Context { get; }
+
+        public ProfessorController(Context context)
         {
-            return Ok(Repository.Professores);
+            this.Context = context;
+
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Professor>>> GetAsync()
+        {
+            var professores = await Context.Professores
+                                            .AsNoTracking()
+                                            .ToListAsync();
+            return Ok(professores);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Professor> GetById(int id)
+        public async Task<ActionResult<Professor>> GetByIdAsync(int id)
         {
-            return Ok(Repository.Professores.FirstOrDefault(p => p.Id == id));
+            var professor = await Context.Professores
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync(p => p.Id == id);
+            return Ok(professor);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Professor professor)
+        public async Task<IActionResult> PutAsync(int id, Professor professor)
         {
-            var _professor = Repository.Professores.FirstOrDefault(p => p.Id == id);
+            var _professor = await Context.Professores.FirstOrDefaultAsync(p => p.Id == id);
             professor.Id = _professor.Id;
-            Repository.Professores.Remove(professor);
-            Repository.Professores.Add(professor);
+            Context.Professores.Update(professor);
+            await Context.SaveChangesAsync();
             return Ok();
         }
 
@@ -37,13 +54,13 @@ namespace SmartSchool.WebAPI.Controllers
             Repository.Professores.Add(professor);
             return Created($"api/aluno/{professor.Id}", professor);
         }
-        
-    [HttpDelete("{id}")]
+
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var professor = Repository.Professores.FirstOrDefault(p => p.Id == id);
             return Ok(Repository.Professores.Remove(professor));
         }
-        
+
     }
 }

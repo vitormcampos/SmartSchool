@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SmartSchool.WebAPI.Data;
 using SmartSchool.WebAPI.Models;
 
 namespace SmartSchool.WebAPI.Controllers
@@ -9,42 +12,56 @@ namespace SmartSchool.WebAPI.Controllers
     [Route("api/[controller]")]
     public class DisciplinaController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<Disciplina>> Get()
+        public Context Context { get; }
+
+        public DisciplinaController(Context context)
         {
-            var disciplinas = Repository.Disciplinas;
+            this.Context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Disciplina>>> GetAsync()
+        {
+            var disciplinas = await Context.Disciplinas
+                                        .AsNoTracking()
+                                        .ToListAsync();
             return Ok(disciplinas);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Disciplina> GetById(int id)
+        public async Task<ActionResult<Disciplina>> GetByIdAsync(int id)
         {
-            var disciplina = Repository.Disciplinas.FirstOrDefault(d => d.Id == id);
+            var disciplina = await Context.Disciplinas
+                                        .AsNoTracking()
+                                        .FirstOrDefaultAsync(d => d.Id == id);
             return Ok(disciplina);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Disciplina disciplina)
+        public async Task<IActionResult> PutAsync(int id, Disciplina disciplina)
         {
-            var _disciplina = Repository.Disciplinas.FirstOrDefault(d => d.Id == id);
+            var _disciplina = await Context.Disciplinas.FirstOrDefaultAsync(d => d.Id == id);
             disciplina.Id = _disciplina.Id;
-            Repository.Disciplinas.Remove(disciplina);
-            Repository.Disciplinas.Add(disciplina);
+            Context.Update(disciplina);
+            await Context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult Post(Disciplina disciplina)
+        public async Task<IActionResult> PostAsync(Disciplina disciplina)
         {
-            Repository.Disciplinas.Add(disciplina);
+            await Context.Disciplinas.AddAsync(disciplina);
+            await Context.SaveChangesAsync();
             return Created($"api/aluno/{disciplina.Id}", disciplina);
         }
         
     [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            var disciplina = Repository.Disciplinas.FirstOrDefault(d => d.Id == id);
-            return Ok(Repository.Disciplinas.Remove(disciplina));
+            var disciplina = await Context.Disciplinas.FirstOrDefaultAsync(d => d.Id == id);
+            Context.Disciplinas.Remove(disciplina);
+            await Context.SaveChangesAsync();
+            return Ok();
         }
         
     }
