@@ -12,57 +12,68 @@ namespace SmartSchool.WebAPI.Controllers
     [Route("api/[controller]")]
     public class DisciplinaController : ControllerBase
     {
-        public Context Context { get; }
 
-        public DisciplinaController(Context context)
+        public readonly Repository Repository;
+        public DisciplinaController(Repository repository)
         {
-            this.Context = context;
+            this.Repository = repository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Disciplina>>> GetAsync()
         {
-            var disciplinas = await Context.Disciplinas
-                                        .AsNoTracking()
-                                        .ToListAsync();
+            var disciplinas = await Repository.GetDisciplinas();
             return Ok(disciplinas);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Disciplina>> GetByIdAsync(int id)
         {
-            var disciplina = await Context.Disciplinas
-                                        .AsNoTracking()
-                                        .FirstOrDefaultAsync(d => d.Id == id);
+            var disciplina = await Repository.GetDisciplina(id);
             return Ok(disciplina);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, Disciplina disciplina)
         {
-            var _disciplina = await Context.Disciplinas.FirstOrDefaultAsync(d => d.Id == id);
-            disciplina.Id = _disciplina.Id;
-            Context.Update(disciplina);
-            await Context.SaveChangesAsync();
-            return Ok();
+            if (disciplina.Id == id) return BadRequest("Identificador diferente da entidade");
+
+            var _disciplina = await Repository.GetDisciplina(id);
+            if (_disciplina == null) return BadRequest("Entidade não encontrada");
+
+            Repository.Update(disciplina);
+            if (await Repository.SaveChangesAsync())
+            {
+                return Ok("Alterado!");
+            }
+            return BadRequest("Erro");
         }
 
         [HttpPost]
         public async Task<IActionResult> PostAsync(Disciplina disciplina)
         {
-            await Context.Disciplinas.AddAsync(disciplina);
-            await Context.SaveChangesAsync();
-            return Created($"api/aluno/{disciplina.Id}", disciplina);
+            await Repository.AddAsync(disciplina);
+            if (await Repository.SaveChangesAsync())
+            {
+                return Created($"api/disciplina/{disciplina.Id}", disciplina);
+            }
+            return BadRequest("Erro");
         }
-        
-    [HttpDelete("{id}")]
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var disciplina = await Context.Disciplinas.FirstOrDefaultAsync(d => d.Id == id);
-            Context.Disciplinas.Remove(disciplina);
-            await Context.SaveChangesAsync();
-            return Ok();
+            var disciplina = await Repository.GetDisciplina(id);
+
+            if (disciplina == null) return BadRequest("Entidade não encontrada");
+
+            Repository.Delete(disciplina);
+            if (await Repository.SaveChangesAsync())
+            {
+                return Ok("Deletado!");
+            }
+            return BadRequest("Erro");
         }
-        
+
     }
 }

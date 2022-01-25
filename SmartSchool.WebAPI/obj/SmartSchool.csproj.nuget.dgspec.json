@@ -1,29 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj": {}
+    "C:\\Dev\\WEB\\SmartSchool\\SmartSchool.WebAPI\\SmartSchool.csproj": {}
   },
   "projects": {
-    "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj": {
+    "C:\\Dev\\WEB\\SmartSchool\\SmartSchool.WebAPI\\SmartSchool.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj",
+        "projectUniqueName": "C:\\Dev\\WEB\\SmartSchool\\SmartSchool.WebAPI\\SmartSchool.csproj",
         "projectName": "SmartSchool",
-        "projectPath": "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/SmartSchool.csproj",
-        "packagesPath": "/home/vitor/.nuget/packages/",
-        "outputPath": "/home/vitor/Dev/SmartSchool/SmartSchool.WebAPI/obj/",
+        "projectPath": "C:\\Dev\\WEB\\SmartSchool\\SmartSchool.WebAPI\\SmartSchool.csproj",
+        "packagesPath": "C:\\Users\\Vitor Campos\\.nuget\\packages\\",
+        "outputPath": "C:\\Dev\\WEB\\SmartSchool\\SmartSchool.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/vitor/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Vitor Campos\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -35,6 +38,29 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -53,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/vitor/dotnet/sdk/3.1.416/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

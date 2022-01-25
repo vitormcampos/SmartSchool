@@ -12,56 +12,67 @@ namespace SmartSchool.WebAPI.Controllers
     [Route("api/[controller]")]
     public class AlunoController : ControllerBase
     {
-        public Context Context { get; }
+        public readonly IRepository Repository;
 
-        public AlunoController(Context context)
+        public AlunoController(IRepository repository)
         {
-            this.Context = context;
+            this.Repository = repository;
         }
-
         [HttpGet]
-        public async  Task<ActionResult<IEnumerable<Aluno>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<Aluno>>> GetAsync()
         {
-            var alunos = await Context.Alunos
-                                .AsNoTracking()
-                                .ToListAsync();
+            var alunos = await Repository.GetAlunos(true);
+
             return Ok(alunos);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Aluno>> GetByIdAsync(int id)
         {
-            var aluno = await Context.Alunos
-                                .AsNoTracking()
-                                .FirstOrDefaultAsync(a => a.Id == id);
+            var aluno = await Repository.GetAluno(id, true);
             return Ok(aluno);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, Aluno aluno)
         {
-            var _aluno = await Context.Alunos.FirstOrDefaultAsync(a => a.Id == id);
-            aluno.Id = _aluno.Id;
-            Context.Alunos.Update(aluno);
-            await Context.SaveChangesAsync();
-            return Ok();
+            if (aluno.Id == id) return BadRequest("Identificador diferente da entidade");
+
+            var _aluno = await Repository.GetProfessor(id, false);
+            if (_aluno == null) return BadRequest("Entidade não encontrada");
+
+            Repository.Update(aluno);
+            if (await Repository.SaveChangesAsync())
+            {
+                return Ok("Alterado!");
+            }
+            return BadRequest("Erro");
         }
 
         [HttpPost]
         public async Task<IActionResult> PostAsync(Aluno aluno)
         {
-            await Context.AddAsync(aluno);
-            await Context.SaveChangesAsync();
-            return Created($"api/aluno/{aluno.Id}", aluno);
+             await Repository.AddAsync(aluno);
+            if (await Repository.SaveChangesAsync())
+            {
+                return Created($"api/aluno/{aluno.Id}", aluno);
+            }
+            return BadRequest("Erro");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var aluno = await Context.Alunos.FirstOrDefaultAsync(a => a.Id == id);
-            Context.Alunos.Remove(aluno);
-            await Context.SaveChangesAsync();
-            return Ok();
+            var professor = await Repository.GetProfessor(id, false);
+
+            if (professor == null) return BadRequest("Entidade não encontrada");
+
+            Repository.Delete(professor);
+            if (await Repository.SaveChangesAsync())
+            {
+                return Ok("Deletado!");
+            }
+            return BadRequest("Erro");
         }
 
     }
