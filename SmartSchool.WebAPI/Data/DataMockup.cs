@@ -30,22 +30,7 @@ namespace SmartSchool.WebAPI
 
         public static List<Professor> Professores = new List<Professor> 
         { 
-            new Professor() {
-                Id = 1,
-                Nome = "Dada"
-            },
-            new Professor() {
-                Id = 2,
-                Nome = "Livia"
-            },
-            new Professor() {
-                Id = 3,
-                Nome = "Juliana"
-            },
-            new Professor() {
-                Id = 4,
-                Nome = "Claudia"
-            }
+           
          };
 
         public static List<Disciplina> Disciplinas = new List<Disciplina> 

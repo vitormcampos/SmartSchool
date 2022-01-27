@@ -12,57 +12,57 @@ namespace SmartSchool.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AlunoController : ControllerBase
+    public class CursoController : ControllerBase
     {
         public readonly IRepository Repository;
         public readonly IMapper Mapper;
 
-        public AlunoController(IRepository repository, IMapper mapper)
+        public CursoController(IRepository repository, IMapper mapper)
         {
             this.Mapper = mapper;
             this.Repository = repository;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Aluno>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<Curso>>> GetAsync()
         {
-            var alunos = await Repository.GetAlunos(true);
+            var cursos = await Repository.GetCursos();
 
-            return Ok(Mapper.Map<IEnumerable<AlunoDto>>(alunos));
+            return Ok(Mapper.Map<IEnumerable<CursoDto>>(cursos));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Aluno>> GetByIdAsync(int id)
+        public async Task<ActionResult<Curso>> GetByIdAsync(int id)
         {
-            var aluno = await Repository.GetAluno(id, true);
-            return Ok(Mapper.Map<AlunoDto>(aluno));
+            var curso = await Repository.GetCurso(id);
+            return Ok(Mapper.Map<CursoDto>(curso));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, AlunoDto alunoDto)
+        public async Task<IActionResult> PutAsync(int id, CursoDto cursoDto)
         {
-            if (alunoDto.Id == id) return BadRequest("Identificador diferente da entidade");
+            if (cursoDto.Id == id) return BadRequest("Identificador diferente da entidade");
 
-            var aluno = await Repository.GetProfessor(id, false);
-            if (aluno == null) return BadRequest("Entidade não encontrada");
+            var curso = await Repository.GetCurso(id);
+            if (curso == null) return BadRequest("Entidade não encontrada");
 
-            Mapper.Map(alunoDto, aluno);
+            Mapper.Map(cursoDto, curso);
 
-            Repository.Update(aluno);
+            Repository.Update(curso);
             if (await Repository.SaveChangesAsync())
             {
-                return Ok("Alterado!");
+                return Created($"api/curso/{curso.Id}", Mapper.Map<CursoDto>(curso));
             }
             return BadRequest("Erro");
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(AlunoDto alunoDto)
+        public async Task<IActionResult> PostAsync(CursoDto cursoDto)
         {
-            var aluno = Mapper.Map<Aluno>(alunoDto);
-            await Repository.AddAsync(aluno);
+            var curso = Mapper.Map<Curso>(cursoDto);
+            await Repository.AddAsync(curso);
             if (await Repository.SaveChangesAsync())
             {
-                return Created($"api/aluno/{alunoDto.Id}", Mapper.Map<AlunoDto>(aluno));
+                return Created($"api/aluno/{cursoDto.Id}", Mapper.Map<CursoDto>(curso));
             }
             return BadRequest("Erro");
         }

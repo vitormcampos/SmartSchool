@@ -22,8 +22,13 @@ namespace SmartSchool.WebAPI.Data
         Task<Professor> GetProfessor(int id, bool includeAluno = false);
 
 
-        /// Disciplinas - TODO pensar nas entidades dos includes
+        /// Disciplinas
         Task<IEnumerable<Disciplina>> GetDisciplinas();
         Task<Disciplina> GetDisciplina(int id);
+
+
+        /// Cursos
+        Task<IEnumerable<Curso>> GetCursos();
+        Task<Curso> GetCurso(int id);
     }
 }

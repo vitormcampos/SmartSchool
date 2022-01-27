@@ -135,7 +135,7 @@ namespace SmartSchool.WebAPI.Data
         public async Task<IEnumerable<Disciplina>> GetDisciplinas()
         {
             var disciplinas = Context.Disciplinas.AsNoTracking()
-                                                    .OrderBy(d => d.Id);
+                .OrderBy(d => d.Id);
 
             return await disciplinas.ToListAsync();
         }
@@ -144,10 +144,25 @@ namespace SmartSchool.WebAPI.Data
         public async Task<Disciplina> GetDisciplina(int id)
         {
             var disciplina = await Context.Disciplinas.AsNoTracking()
-                                                        .FirstOrDefaultAsync(d => d.Id == id);
+                .FirstOrDefaultAsync(d => d.Id == id);
                                                     
 
             return disciplina;
+        }
+
+        public async Task<IEnumerable<Curso>> GetCursos()
+        {
+            var cursos = await Context.Cursos.AsNoTracking()
+                .ToListAsync();
+            return cursos;
+        }
+
+        public async Task<Curso> GetCurso(int id)
+        {
+            var curso = await Context.Cursos.AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+                return curso;
         }
     }
 }
