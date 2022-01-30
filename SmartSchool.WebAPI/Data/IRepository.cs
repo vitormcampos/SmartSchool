@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartSchool.WebAPI.Helpers;
 using SmartSchool.WebAPI.Models;
 
 namespace SmartSchool.WebAPI.Data
@@ -12,23 +13,23 @@ namespace SmartSchool.WebAPI.Data
         Task<bool> SaveChangesAsync();
 
         /// Alunos
-        Task<IEnumerable<Aluno>> GetAlunos(bool includeProfessor = false);
-        Task<IEnumerable<Aluno>> GetAlunosByDisciplinaId(int id, bool includeProfessor = false);
+        Task<PaginationList<Aluno>> GetAlunos(PaginationParams pageParams, bool includeProfessor = false);
+        Task<PaginationList<Aluno>> GetAlunosByDisciplinaId(int id, PaginationParams pageParams, bool includeProfessor = false);
         Task<Aluno> GetAluno(int id, bool includeProfessor = false);
 
         /// Professores
-        Task<IEnumerable<Professor>> GetProfessores(bool includeAluno = false);
-        Task<IEnumerable<Professor>> GetProfessoresByDisciplinaId(int id, bool includeAluno = false);
+        Task<PaginationList<Professor>> GetProfessores(PaginationParams pageParams, bool includeAluno = false);
+        Task<PaginationList<Professor>> GetProfessoresByDisciplinaId(int id, PaginationParams pageParams, bool includeAluno = false);
         Task<Professor> GetProfessor(int id, bool includeAluno = false);
 
 
         /// Disciplinas
-        Task<IEnumerable<Disciplina>> GetDisciplinas();
+        Task<PaginationList<Disciplina>> GetDisciplinas(PaginationParams pageParams);
         Task<Disciplina> GetDisciplina(int id);
 
 
         /// Cursos
-        Task<IEnumerable<Curso>> GetCursos();
+        Task<PaginationList<Curso>> GetCursos(PaginationParams pageParams);
         Task<Curso> GetCurso(int id);
     }
 }

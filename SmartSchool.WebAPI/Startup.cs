@@ -28,14 +28,26 @@ namespace SmartSchool
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>( 
+            services.AddDbContext<Context>(
                 context => context.UseSqlite(Configuration.GetConnectionString("Sqlite"))
                 );
             services.AddControllers()
                         .AddNewtonsoftJson(
-                            opt => opt.SerializerSettings.ReferenceLoopHandling = 
+                            opt => opt.SerializerSettings.ReferenceLoopHandling =
                             Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddScoped<IRepository, Repository>();
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.SwaggerDoc(
+                        "smartshcoolapi",
+                        new Microsoft.OpenApi.Models.OpenApiInfo()
+                        {
+                            Title = "SmartSchool API",
+                            Version = "1.0"
+                        });
+                }
+            );
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
@@ -50,6 +62,14 @@ namespace SmartSchool
             // app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSwagger()
+                .UseSwaggerUI(
+                    options =>
+                    {
+                        options.SwaggerEndpoint("/swagger/smartshcoolapi/swagger.json", "smartshcoolapi");
+                        options.RoutePrefix = "";
+                    });
 
             app.UseAuthorization();
 

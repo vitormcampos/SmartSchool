@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SmartSchool.WebAPI.Helpers;
 using SmartSchool.WebAPI.Models;
 
 namespace SmartSchool.WebAPI.Data
@@ -13,8 +14,9 @@ namespace SmartSchool.WebAPI.Data
         public Repository(Context context)
         {
             this.Context = context;
-
         }
+
+
         public async Task AddAsync<T>(T entity) where T : class
         {
             await Context.AddAsync(entity);
@@ -50,7 +52,7 @@ namespace SmartSchool.WebAPI.Data
                 return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Aluno>> GetAlunos(bool includeProfessor)
+        public async Task<PaginationList<Aluno>> GetAlunos(PaginationParams pageParams, bool includeProfessor = false)
         {
             IQueryable<Aluno> query = Context.Alunos;
 
@@ -62,10 +64,10 @@ namespace SmartSchool.WebAPI.Data
             }
             query = query.AsNoTracking()
                             .OrderBy(aluno => aluno.Id);
-                return await query.ToListAsync();
+                return await PaginationList<Aluno>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
-        public async Task<IEnumerable<Aluno>> GetAlunosByDisciplinaId(int id, bool includeProfessor = false)
+        public async Task<PaginationList<Aluno>> GetAlunosByDisciplinaId(int id, PaginationParams pageParams, bool includeProfessor = false)
         {
             IQueryable<Aluno> query = Context.Alunos;
 
@@ -78,7 +80,7 @@ namespace SmartSchool.WebAPI.Data
             query = query.AsNoTracking()
                             .OrderBy(a => a.Id)
                             .Where(aluno => aluno.AlunoDisciplinas.Any(alunoDisciplinas => alunoDisciplinas.DisciplinaId == id));
-                return await query.ToListAsync();
+                return await PaginationList<Aluno>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
         public async Task<Professor> GetProfessor(int id, bool includeAluno = false)
@@ -97,7 +99,7 @@ namespace SmartSchool.WebAPI.Data
                 return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Professor>> GetProfessores(bool includeAluno)
+        public async Task<PaginationList<Professor>> GetProfessores(PaginationParams pageParams, bool includeAluno)
         {
             IQueryable<Professor> query = Context.Professores;
 
@@ -110,10 +112,10 @@ namespace SmartSchool.WebAPI.Data
             }
             query = query.AsNoTracking()
                             .OrderBy(p => p.Id);
-                return await query.ToListAsync();
+                return await PaginationList<Professor>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
-        public async Task<IEnumerable<Professor>> GetProfessoresByDisciplinaId(int id, bool includeAluno = false)
+        public async Task<PaginationList<Professor>> GetProfessoresByDisciplinaId(int id, PaginationParams pageParams, bool includeAluno = false)
         {
             IQueryable<Professor> query = Context.Professores;
 
@@ -129,15 +131,20 @@ namespace SmartSchool.WebAPI.Data
                                 disciplina => disciplina.AlunoDisciplinas.Any(
                                     alunoDisciplinas => alunoDisciplinas.DisciplinaId == id)
                                     ));
-                return await query.ToListAsync();
+                return await PaginationList<Professor>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
-        public async Task<IEnumerable<Disciplina>> GetDisciplinas()
+        public async Task<PaginationList<Disciplina>> GetDisciplinas(PaginationParams pageParams)
         {
-            var disciplinas = Context.Disciplinas.AsNoTracking()
-                .OrderBy(d => d.Id);
+            // var disciplinas = Context.Disciplinas.AsNoTracking()
+            //     .OrderBy(d => d.Id);
 
-            return await disciplinas.ToListAsync();
+            IQueryable<Disciplina> query = Context.Disciplinas;
+
+            query = query.AsNoTracking()
+                .OrderBy(disciplina => disciplina.Id);
+
+            return await PaginationList<Disciplina>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
 
@@ -150,11 +157,18 @@ namespace SmartSchool.WebAPI.Data
             return disciplina;
         }
 
-        public async Task<IEnumerable<Curso>> GetCursos()
+        public async Task<PaginationList<Curso>> GetCursos(PaginationParams pageParams)
         {
-            var cursos = await Context.Cursos.AsNoTracking()
-                .ToListAsync();
-            return cursos;
+            // var cursos = await Context.Cursos.AsNoTracking()
+            //     .ToListAsync();
+            // return cursos;
+
+            IQueryable<Curso> query = Context.Cursos;
+
+            query = query.AsNoTracking()
+                .OrderBy(curso => curso.Id);
+
+            return await PaginationList<Curso>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
         public async Task<Curso> GetCurso(int id)

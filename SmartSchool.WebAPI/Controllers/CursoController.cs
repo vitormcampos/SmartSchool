@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartSchool.WebAPI.Data;
 using SmartSchool.WebAPI.Dtos;
+using SmartSchool.WebAPI.Helpers;
 using SmartSchool.WebAPI.Models;
 
 namespace SmartSchool.WebAPI.Controllers
@@ -23,11 +24,13 @@ namespace SmartSchool.WebAPI.Controllers
             this.Repository = repository;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Curso>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<Curso>>> GetAsync([FromQuery] PaginationParams pageParams)
         {
-            var cursos = await Repository.GetCursos();
+            var cursos = await Repository.GetCursos(pageParams);
+            var cursosMapped = Mapper.Map<IEnumerable<CursoDto>>(cursos);
+            Response.AddPagination(cursos.CurrentPage, cursos.PageSize, cursos.TotalCount, cursos.TotalPages);
 
-            return Ok(Mapper.Map<IEnumerable<CursoDto>>(cursos));
+            return Ok(cursosMapped);
         }
 
         [HttpGet("{id}")]
